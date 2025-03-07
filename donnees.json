@@ -1,0 +1,90 @@
+{
+    "questions": [
+      {
+        "keywords": ["formation", "durée", "combien de temps"],
+        "responses": [
+          "La formation standard dure 4 ans. Une formation accélérée en 3 ans est possible avec la maturité professionnelle.",
+          "Le cursus inclut des stages en entreprise et des cours théoriques répartis sur la durée de la formation."
+        ]
+      },
+      {
+        "keywords": ["lieu", "adresse", "où", "endroit"],
+        "responses": [
+          "La formation a lieu au Centre de formation professionnelle Technique (CFPT), situé Route du Pont-Butin 43, 1213 Petit-Lancy, Genève.",
+          "Le CFPT est accessible en transports en commun via les lignes de bus et tram de Genève."
+        ]
+      },
+      {
+        "keywords": ["admission", "conditions", "inscription", "comment s'inscrire", "prérequis"],
+        "responses": [
+          "L'admission requiert un âge minimum de 15 ans et un diplôme de fin de Cycle d'orientation.",
+          "Les tests d'entrée évaluent les compétences en mathématiques, logique et français.",
+          "L'inscription se fait en ligne du 20 janvier au 28 février 2025 via le compte e-démarches du répondant légal."
+        ]
+      },
+      {
+        "keywords": ["coût", "prix", "frais", "combien ça coûte"],
+        "responses": [
+          "Les frais de formation sont pris en charge par l'État, mais des coûts supplémentaires pour le matériel et les livres peuvent s'appliquer.",
+          "Des aides financières ou bourses sont disponibles selon la situation des étudiants."
+        ]
+      },
+      {
+        "keywords": ["maturité", "MP", "MPTASV", "option", "maturité professionnelle"],
+        "responses": [
+          "La maturité professionnelle technique (MPTASV) peut être suivie en parallèle de la formation ou après l'obtention du CFC.",
+          "Elle ouvre l'accès aux Hautes écoles spécialisées (HES) pour poursuivre les études supérieures."
+        ]
+      },
+      {
+        "keywords": ["diplôme", "certification", "CFC", "qualification"],
+        "responses": [
+          "À la fin de la formation, un Certificat Fédéral de Capacité (CFC) en informatique est délivré.",
+          "Une Maturité Professionnelle peut également être obtenue pour ceux qui suivent l'option correspondante."
+        ]
+      },
+      {
+        "keywords": ["début", "rentrée", "quand commence", "date de début"],
+        "responses": [
+          "La rentrée scolaire a lieu chaque année à la fin du mois d'août.",
+          "Les dates précises sont communiquées sur le site officiel du CFPT."
+        ]
+      },
+      {
+        "keywords": ["portes ouvertes", "visite", "journée", "découverte"],
+        "responses": [
+          "Les journées portes ouvertes auront lieu le samedi 23 novembre 2024 de 9h à 16h à Petit-Lancy.",
+          "C'est l'occasion idéale pour découvrir les infrastructures, rencontrer les enseignants et poser des questions."
+        ]
+      },
+      {
+        "keywords": ["contact", "renseignement", "email", "téléphone", "secrétariat"],
+        "responses": [
+          "Pour toute question, contactez le secrétariat au +41 22 388 87 28 ou par e-mail à cfptinformatique@edu.ge.ch.",
+          "Les bureaux sont ouverts du lundi au vendredi de 8h à 17h."
+        ]
+      },
+      {
+        "keywords": ["stage", "demande de stage", "comment faire un stage"],
+        "responses": [
+          "Les stages sont intégrés à la formation et permettent d'acquérir une expérience professionnelle.",
+          "Les demandes de stage se font en ligne via Edu.ge.ch > CFPT Informatique > Stage Demande de stage."
+        ]
+      },
+      {
+        "keywords": ["contenu", "matières", "cours", "programme"],
+        "responses": [
+          "Les cours incluent la programmation, les mathématiques, la physique, l'économie d'entreprise et l'anglais technique.",
+          "Des ateliers pratiques et des projets collaboratifs sont organisés tout au long de la formation."
+        ]
+      },
+      {
+        "keywords": ["examen", "test", "épreuve", "concours d'entrée"],
+        "responses": [
+          "Le concours d'entrée comprend des épreuves de mathématiques, français et logique.",
+          "Les tests se déroulent en mars et avril, une convocation est envoyée aux candidats inscrits."
+        ]
+      }
+    ]
+  }
+  
