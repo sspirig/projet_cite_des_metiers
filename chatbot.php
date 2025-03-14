@@ -54,6 +54,10 @@
             }
         }
 
+        #btnChat {
+            margin-top: 0;
+        }
+
         .chat-container {
             width: 80%;
             max-width: 600px;
@@ -166,7 +170,7 @@
         <div class="chat-box" id="chat-box"></div>
         <div class="input-group">
             <input type="text" id="userInput" class="form-control" placeholder="Posez votre question..." required>
-            <button onclick="sendMessage()" class="btn btn-primary">Envoyer</button>
+            <button onclick="sendMessage()" id="btnChat" class="btn btn-primary">Envoyer</button>
         </div>
     </div>
 
