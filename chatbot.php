@@ -175,19 +175,16 @@
     </div>
 
     <script>
-        // Fonction pour envoyer un message
-        // Fonction pour envoyer un message
         function sendMessage() {
             let input = document.getElementById("userInput");
             let message = input.value.trim();
             if (message === "") return;
 
             let chatBox = document.getElementById("chat-box");
-            // Affichage du message envoyé par l'utilisateur
-            chatBox.innerHTML += `<div class='message question'><strong>Vous :</strong> ${message}</div>`;
-            input.value = ""; // Réinitialiser l'input
 
-            // Envoi de la requête AJAX vers le fichier PHP
+            chatBox.innerHTML += `<div class='message question'><strong>Vous :</strong> ${message}</div>`;
+            input.value = ""; 
+
             fetch('fetch.php', {
                     method: 'POST',
                     body: new URLSearchParams({
@@ -199,12 +196,12 @@
                     let botResponses = data.response;
 
                     if (Array.isArray(botResponses)) {
-                        // Affichage de plusieurs réponses du bot
+
                         botResponses.forEach(response => {
                             chatBox.innerHTML += `<div class='message response'><strong>Chatbot :</strong> ${response}</div>`;
                         });
                     } else {
-                        // Affichage d'une seule réponse si c'est une chaîne de caractères
+
                         chatBox.innerHTML += `<div class='message response'><strong>Chatbot :</strong> ${botResponses}</div>`;
                     }
 
@@ -217,26 +214,23 @@
         }
 
 
-        // Animation pour l'affichage du message de bienvenue et la barre de recherche
         window.onload = function() {
             let welcomeMessage = document.getElementById("welcome-message");
             setTimeout(() => {
-                welcomeMessage.style.opacity = "0"; // Faire disparaître le message de bienvenue
+                welcomeMessage.style.opacity = "0";
             }, 3000);
 
             setTimeout(() => {
                 let chatContainer = document.getElementById("chat-container");
-                chatContainer.classList.add("active"); // Faire apparaître la barre de recherche avec animation
+                chatContainer.classList.add("active"); 
             }, 3500);
         };
 
-        // Ajouter un écouteur d'événements pour la barre de recherche
         document.getElementById("userInput").addEventListener("click", function() {
             let welcomeMessage = document.getElementById("welcome-message");
-            welcomeMessage.style.display = "none"; // Masquer le message de bienvenue dès que l'utilisateur clique sur la barre de recherche
+            welcomeMessage.style.display = "none";
         });
 
-        // Ajouter un écouteur d'événements pour la touche "Enter"
         document.getElementById("userInput").addEventListener("keypress", function(event) {
             if (event.key === "Enter") sendMessage();
         });
