@@ -175,44 +175,99 @@
     </div>
 
     <script>
+        let messageQueue = [];
+        let isTyping = false;
+
         function sendMessage() {
             let input = document.getElementById("userInput");
             let message = input.value.trim();
             if (message === "") return;
 
             let chatBox = document.getElementById("chat-box");
-
             chatBox.innerHTML += `<div class='message question'><strong>Vous :</strong> ${message}</div>`;
-            input.value = ""; 
+            input.value = "";
+
+            // Debug: Vérifiez le message avant l'envoi
+            console.log(message);
 
             fetch('fetch.php', {
                     method: 'POST',
-                    body: new URLSearchParams({
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
                         'message': message
                     })
                 })
-                .then(response => response.json())
-                .then(data => {
-                    let botResponses = data.response;
+                .then(response => response.text()) // Utilise .text() pour vérifier la réponse brute
+                .then(text => {
+                    console.log("Réponse brute du serveur : ", text); // Vérifiez ce que le serveur renvoie
 
-                    if (Array.isArray(botResponses)) {
+                    try {
+                        // Vérifie si la réponse semble être un JSON valide
+                        if (text.trim().startsWith("{") || text.trim().startsWith("[")) {
+                            let data = JSON.parse(text); // Essaie de parser la réponse JSON
+                            let botResponses = Array.isArray(data.response) ? data.response : [data.response];
 
-                        botResponses.forEach(response => {
-                            chatBox.innerHTML += `<div class='message response'><strong>Chatbot :</strong> ${response}</div>`;
-                        });
-                    } else {
+                            if (botResponses.length === 0 || botResponses[0].trim() === "") {
+                                messageQueue.push("Désolé, je n'ai pas encore de réponse à cette question.");
+                            } else {
+                                botResponses.forEach(response => {
+                                    messageQueue.push(response);
+                                });
+                            }
 
-                        chatBox.innerHTML += `<div class='message response'><strong>Chatbot :</strong> ${botResponses}</div>`;
+                            processQueue();
+                        } else {
+                            throw new Error("Réponse invalide du serveur");
+                        }
+                    } catch (error) {
+                        console.error("Erreur de parsing JSON :", error);
+                        messageQueue.push("Désolé, il y a eu un problème avec la réponse.");
+                        processQueue();
                     }
-
-                    chatBox.scrollTop = chatBox.scrollHeight;
                 })
                 .catch(error => {
-                    chatBox.innerHTML += `<div class='message response'><strong>Chatbot :</strong> Désolé, il y a eu un problème.</div>`;
-                    chatBox.scrollTop = chatBox.scrollHeight;
+                    console.error("Erreur de requête :", error);
+                    messageQueue.push("Désolé, il y a eu un problème.");
+                    processQueue();
                 });
         }
 
+        function processQueue() {
+            if (isTyping || messageQueue.length === 0) return;
+
+            isTyping = true;
+            let text = messageQueue.shift();
+            typeResponse(text, () => {
+                isTyping = false;
+                processQueue();
+            });
+        }
+
+        function typeResponse(text, callback) {
+            let chatBox = document.getElementById("chat-box");
+            let responseDiv = document.createElement("div");
+            responseDiv.classList.add("message", "response");
+            responseDiv.innerHTML = `<strong>Chatbot :</strong> <span class="typing"></span>`;
+            chatBox.appendChild(responseDiv);
+
+            let typingSpan = responseDiv.querySelector(".typing");
+            let index = 0;
+
+            function typeCharacter() {
+                if (index < text.length) {
+                    typingSpan.innerHTML += text.charAt(index);
+                    index++;
+                    setTimeout(typeCharacter, 50);
+                } else {
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                    setTimeout(callback, 500);
+                }
+            }
+
+            typeCharacter();
+        }
 
         window.onload = function() {
             let welcomeMessage = document.getElementById("welcome-message");
@@ -222,7 +277,7 @@
 
             setTimeout(() => {
                 let chatContainer = document.getElementById("chat-container");
-                chatContainer.classList.add("active"); 
+                chatContainer.classList.add("active");
             }, 3500);
         };
 
@@ -235,6 +290,8 @@
             if (event.key === "Enter") sendMessage();
         });
     </script>
+
+
 </body>
 
 </html>

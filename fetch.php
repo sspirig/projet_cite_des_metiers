@@ -1,15 +1,22 @@
 <?php
 require_once 'db.php';
 
-if (!isset($_POST['message']) || empty(trim($_POST['message']))) {
+header('Content-Type: application/json; charset=UTF-8');
+ob_clean();
+
+$data = json_decode(file_get_contents('php://input'), true);
+
+if (!isset($data['message']) || empty(trim($data['message']))) {
     echo json_encode(["response" => "Je n'ai pas compris votre question."]);
     exit;
 }
 
-$userInput = strtolower(trim($_POST['message']));
+$userInput = strtolower(trim($data['message']));
+
+error_log("Message reçu : " . $userInput);
 
 $stmt = $pdo->query("SELECT id, question_keywords FROM questions");
-$matchingQuestions = []; 
+$matchingQuestions = [];
 
 while ($row = $stmt->fetch()) {
     $keywords = json_decode($row['question_keywords'], true);
@@ -22,28 +29,44 @@ while ($row = $stmt->fetch()) {
     }
 
     if ($score > 0) {
-        $matchingQuestions[] = $row['id']; 
+        $matchingQuestions[$row['id']] = $score;
     }
 }
 
 if (!empty($matchingQuestions)) {
-    $placeholders = str_repeat('?,', count($matchingQuestions) - 1) . '?'; 
+    arsort($matchingQuestions);
+    $bestMatches = array_keys(array_slice($matchingQuestions, 0, 3, true));
+
+    $placeholders = implode(',', array_fill(0, count($bestMatches), '?'));
     $stmt = $pdo->prepare("SELECT response_text FROM responses WHERE question_id IN ($placeholders)");
-    $stmt->execute($matchingQuestions);
+    $stmt->execute($bestMatches);
     $responses = $stmt->fetchAll();
 
     if ($responses) {
-        $responseTexts = [];
-        
-        foreach ($responses as $response) {
-            $responseTexts[] = $response['response_text'];
-        }
-        
-        echo json_encode(["response" => $responseTexts]);
-    } else {
-        echo json_encode(["response" => "Je n'ai pas trouvé de réponse appropriée."]);
+        echo json_encode(["response" => array_column($responses, 'response_text')]);
+        exit;
     }
-} else {
-    echo json_encode(["response" => "Je ne suis pas en mesure de comprendre ce que vous m'avez demandé !"]);
 }
-?>
+
+saveUnansweredQuestion($userInput);
+echo json_encode(["response" => "Je ne suis pas en mesure de comprendre ce que vous m'avez demandé !"]);
+exit;
+
+function saveUnansweredQuestion($question)
+{
+    $file = 'unanswered_questions.json';
+
+    // Vérifie si le fichier existe et charge son contenu ou initialise un tableau vide
+    $questions = file_exists($file) ? json_decode(file_get_contents($file), true) : [];
+
+    // Si le fichier est vide, on initialise un tableau vide pour éviter l'erreur `null`
+    if (!is_array($questions)) {
+        $questions = [];
+    }
+
+    // Ajoute la question à la liste si elle n'existe pas déjà
+    if (!in_array($question, $questions)) {
+        $questions[] = $question;
+        file_put_contents($file, json_encode($questions, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+    }
+}
