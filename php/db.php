@@ -1,8 +1,28 @@
 <?php
 $host = 'localhost';
 $dbname = 'chatbot_db';
-$username = 'zackaryist'; 
-$password = 'Super';
+$username = ''; 
+$password = '';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password, [
