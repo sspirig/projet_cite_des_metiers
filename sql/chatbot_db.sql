@@ -24,6 +24,7 @@ SET time_zone = "+00:00";
 CREATE DATABASE IF NOT EXISTS chatbot_db;
 -- --------------------------------------------------------
 
+USE chatbot_db;
 --
 -- Structure de la table `questions`
 --
