@@ -56,15 +56,12 @@ function saveUnansweredQuestion($question)
 {
     $file = 'unanswered_questions.json';
 
-    // Vérifie si le fichier existe et charge son contenu ou initialise un tableau vide
     $questions = file_exists($file) ? json_decode(file_get_contents($file), true) : [];
 
-    // Si le fichier est vide, on initialise un tableau vide pour éviter l'erreur `null`
     if (!is_array($questions)) {
         $questions = [];
     }
 
-    // Ajoute la question à la liste si elle n'existe pas déjà
     if (!in_array($question, $questions)) {
         $questions[] = $question;
         file_put_contents($file, json_encode($questions, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:3306
--- Généré le : ven. 07 mars 2025 à 12:10
+-- Généré le : ven. 21 mars 2025 à 12:23
 -- Version du serveur : 10.11.8-MariaDB-0ubuntu0.24.04.1
 -- Version de PHP : 8.3.12
 
@@ -21,6 +21,7 @@ SET time_zone = "+00:00";
 -- Base de données : `chatbot_db`
 --
 
+CREATE DATABASE IF NOT EXISTS chatbot_db;
 -- --------------------------------------------------------
 
 --
@@ -49,6 +50,37 @@ INSERT INTO `questions` (`id`, `question_keywords`) VALUES
 (10, '[\"stage\", \"demande de stage\", \"comment faire un stage\"]'),
 (11, '[\"contenu\", \"matières\", \"cours\", \"programme\"]'),
 (12, '[\"examen\", \"test\", \"épreuve\", \"concours d\'entrée\"]');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `question_complete`
+--
+
+CREATE TABLE `question_complete` (
+  `id` int(11) NOT NULL,
+  `question_text` text NOT NULL,
+  `keywords` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`keywords`)),
+  `related_question_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Déchargement des données de la table `question_complete`
+--
+
+INSERT INTO `question_complete` (`id`, `question_text`, `keywords`, `related_question_id`) VALUES
+(1, 'Quel est le temps de la formation ?', '[\"formation\", \"durée\", \"combien de temps\"]', 1),
+(2, 'Où se trouve le centre de formation ?', '[\"lieu\", \"adresse\", \"où\", \"endroit\"]', 2),
+(3, 'Comment s\'inscrire à la formation ?', '[\"admission\", \"conditions\", \"inscription\", \"comment s\'inscrire\", \"prérequis\"]', 3),
+(4, 'Combien coûte la formation ?', '[\"coût\", \"prix\", \"frais\", \"combien ça coûte\"]', 4),
+(5, 'Qu\'est-ce que la maturité professionnelle ?', '[\"maturité\", \"MP\", \"MPTASV\", \"option\", \"maturité professionnelle\"]', 5),
+(6, 'Quelles certifications sont obtenues à la fin de la formation ?', '[\"diplôme\", \"certification\", \"CFC\", \"qualification\"]', 6),
+(7, 'Quand commence la rentrée scolaire ?', '[\"début\", \"rentrée\", \"quand commence\", \"date de début\"]', 7),
+(8, 'Quelles sont les dates des journées portes ouvertes ?', '[\"portes ouvertes\", \"visite\", \"journée\", \"découverte\"]', 8),
+(9, 'Comment contacter le secrétariat ?', '[\"contact\", \"renseignement\", \"email\", \"téléphone\", \"secrétariat\"]', 9),
+(10, 'Comment faire une demande de stage ?', '[\"stage\", \"demande de stage\", \"comment faire un stage\"]', 10),
+(11, 'Quel est le programme des cours ?', '[\"contenu\", \"matières\", \"cours\", \"programme\"]', 11),
+(12, 'Quand se déroulent les concours d\'entrée ?', '[\"examen\", \"test\", \"épreuve\", \"concours d\'entrée\"]', 12);
 
 -- --------------------------------------------------------
 
@@ -104,6 +136,13 @@ ALTER TABLE `questions`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Index pour la table `question_complete`
+--
+ALTER TABLE `question_complete`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `related_question_id` (`related_question_id`);
+
+--
 -- Index pour la table `responses`
 --
 ALTER TABLE `responses`
@@ -121,6 +160,12 @@ ALTER TABLE `questions`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
+-- AUTO_INCREMENT pour la table `question_complete`
+--
+ALTER TABLE `question_complete`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
 -- AUTO_INCREMENT pour la table `responses`
 --
 ALTER TABLE `responses`
@@ -129,6 +174,12 @@ ALTER TABLE `responses`
 --
 -- Contraintes pour les tables déchargées
 --
+
+--
+-- Contraintes pour la table `question_complete`
+--
+ALTER TABLE `question_complete`
+  ADD CONSTRAINT `question_complete_ibfk_1` FOREIGN KEY (`related_question_id`) REFERENCES `questions` (`id`) ON DELETE CASCADE;
 
 --
 -- Contraintes pour la table `responses`

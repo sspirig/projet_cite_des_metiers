@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+    <div class="background-overlay"></div>
+    <div class="welcome-message" id="welcome-message">
+        Bienvenue sur notre chatbot !
+    </div>
+
+    <div class="chat-container" id="chat-container">
+        <div class="chat-box" id="chat-box"></div>
+        <div class="input-group">
+            <input type="text" id="userInput" class="form-control" placeholder="Posez votre question..." required>
+            <button onclick="sendMessage()" id="btnChat" class="btn btn-primary">Envoyer</button>
+        </div>
+    </div>
+    <script src="../js/chatbot.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/ui.js"></script>
+    <script src="../js/events.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            initializeChatUI();
+            setupEventListeners();
+        });
+    </script>
+
+</body>
+
+</html>
