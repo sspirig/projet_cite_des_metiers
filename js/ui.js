@@ -25,56 +25,42 @@ function typeResponse(text, callback) {
 function displayUserMessage(message) {
     const chatBox = document.getElementById("chat-box");
     const messageDiv = document.createElement("div");
-    messageDiv.className = "message question";
+    messageDiv.classList.add("message", "question");
     messageDiv.innerHTML = `<strong>Vous :</strong> ${message}`;
     chatBox.appendChild(messageDiv);
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-function displaySuggestedQuestions() {
-    const questions = [
-        "Combien de temps dure la formation ?",
-        "Comment se déroule les inscriptions ?",
-        "Quelles sont les différentes formations disponibles ?"
-    ];
-
-    const container = document.getElementById("suggested-questions");
-    if (!container) return;
-
-    container.innerHTML = "";
-
-    questions.forEach(question => {
-        const btn = document.createElement("button");
-        btn.className = "btn btn-light";
-        btn.textContent = question;
-        btn.onclick = () => {
-            document.getElementById("userInput").value = question;
-            sendMessage();
-        };
-        container.appendChild(btn);
-    });
-
-    document.getElementById("suggestions-container").style.display = "block";
-}
 
 function displaySuggestions(suggestions) {
-    const container = document.getElementById("suggested-questions");
-    container.innerHTML = "";
+    const chatBox = document.getElementById("chat-box");
+
+    const suggestionDiv = document.createElement("div");
+    suggestionDiv.className = "message response";
+    suggestionDiv.innerHTML = `
+        <strong>Chatbot :</strong>
+        <p class="mb-2 mt-1">Voici quelques options à explorer :</p>
+        <div class="suggestion-buttons d-flex flex-wrap gap-2"></div>
+    `;
+
+    const buttonContainer = suggestionDiv.querySelector(".suggestion-buttons");
 
     suggestions.forEach(item => {
         const btn = document.createElement("button");
-        btn.className = "btn btn-outline-primary";
         btn.textContent = item.title;
         btn.onclick = () => {
-            addMessageToQueue(item.text); // affiche la réponse directement
-            container.innerHTML = "";      // vide les suggestions
-            document.getElementById("suggestions-container").style.display = "none";
+            document.getElementById("userInput").value = item.title;
+            sendMessage();
         };
-        container.appendChild(btn);
+        buttonContainer.appendChild(btn);
     });
 
-    document.getElementById("suggestions-container").style.display = "block";
+    chatBox.appendChild(suggestionDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
 }
+
+
+
 
 function initializeChatUI() {
     const welcomeMessage = document.getElementById("welcome-message");
@@ -85,8 +71,6 @@ function initializeChatUI() {
     setTimeout(() => {
         document.getElementById("chat-container").classList.add("active");
         document.getElementById("input-container").classList.add("active");
-        displaySuggestedQuestions(); // suggestions initiales
     }, 3500);
-
-    document.getElementById("suggestions-container").style.display = "none"; // masqué au départ
 }
+

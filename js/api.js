@@ -9,6 +9,8 @@ function sendMessageToServer(message) {
     .then(response => response.json())
     .then(data => {
         let botResponses = Array.isArray(data.response) ? data.response : [data.response];
+        console.log("Réponse analysée du serveur :", data);
+
         return botResponses.length > 0 ? botResponses : ["Désolé, je n'ai pas encore de réponse à cette question."];
     })
     .catch(error => {

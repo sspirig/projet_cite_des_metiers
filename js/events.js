@@ -12,22 +12,29 @@ function setupEventListeners() {
 }
 
 function sendMessage() {
-    let input = document.getElementById("userInput");
-    let message = input.value.trim();
+    const input = document.getElementById("userInput");
+    const message = input.value.trim();
     if (message === "") return;
 
     displayUserMessage(message);
     input.value = "";
 
+    document.getElementById("input-container").classList.add("fixed-bottom");
+
     sendMessageToServer(message).then(data => {
         if (typeof data === "object" && data.suggestions) {
-            addMessageToQueue(data.response);
-            displaySuggestions(data.suggestions);
+            addMessageToQueue(data.response); // le message "Voici plusieurs réponses..."
+            messageQueue.push(() => displaySuggestions(data.suggestions)); // suggestions dynamiques
         } else if (Array.isArray(data)) {
             data.forEach(msg => addMessageToQueue(msg));
         } else {
             addMessageToQueue(data);
         }
     });
+
+
+
 }
+
+
 

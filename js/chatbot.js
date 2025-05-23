@@ -5,11 +5,18 @@ function processQueue() {
     if (isTyping || messageQueue.length === 0) return;
 
     isTyping = true;
-    let text = messageQueue.shift();
-    typeResponse(text, () => {
+    const next = messageQueue.shift();
+
+    if (typeof next === "function") {
+        next(); // exécute une fonction comme displaySuggestions()
         isTyping = false;
-        processQueue();
-    });
+        processQueue(); // continue la queue
+    } else {
+        typeResponse(next, () => {
+            isTyping = false;
+            processQueue();
+        });
+    }
 }
 
 function addMessageToQueue(message) {
