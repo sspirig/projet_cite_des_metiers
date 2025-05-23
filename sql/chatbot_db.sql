@@ -50,7 +50,8 @@ INSERT INTO `questions` (`id`, `question_keywords`) VALUES
 (9, '[\"contact\", \"renseignement\", \"email\", \"téléphone\", \"secrétariat\"]'),
 (10, '[\"stage\", \"demande de stage\", \"comment faire un stage\"]'),
 (11, '[\"contenu\", \"matières\", \"cours\", \"programme\"]'),
-(12, '[\"examen\", \"test\", \"épreuve\", \"concours d\'entrée\"]');
+(12, '[\"examen\", \"test\", \"épreuve\", \"concours d\'entrée\"]'),
+(13, '["plan", "programme", "formation", "documents", "volée", "documents formation"]');
 
 -- --------------------------------------------------------
 
@@ -81,7 +82,8 @@ INSERT INTO `question_complete` (`id`, `question_text`, `keywords`, `related_que
 (9, 'Comment contacter le secrétariat ?', '[\"contact\", \"renseignement\", \"email\", \"téléphone\", \"secrétariat\"]', 9),
 (10, 'Comment faire une demande de stage ?', '[\"stage\", \"demande de stage\", \"comment faire un stage\"]', 10),
 (11, 'Quel est le programme des cours ?', '[\"contenu\", \"matières\", \"cours\", \"programme\"]', 11),
-(12, 'Quand se déroulent les concours d\'entrée ?', '[\"examen\", \"test\", \"épreuve\", \"concours d\'entrée\"]', 12);
+(12, 'Quand se déroulent les concours d\'entrée ?', '[\"examen\", \"test\", \"épreuve\", \"concours d\'entrée\"]', 12),
+(13, 'Où trouver les plans des formations ?', '["plan", "programme", "formation", "documents", "volée", "documents formation"]', 13);
 
 -- --------------------------------------------------------
 
@@ -124,7 +126,9 @@ INSERT INTO `responses` (`id`, `question_id`, `response_text`) VALUES
 (22, 11, 'Les cours incluent la programmation, les mathématiques, la physique, l\'économie d\'entreprise et l\'anglais technique.'),
 (23, 11, 'Des ateliers pratiques et des projets collaboratifs sont organisés tout au long de la formation.'),
 (24, 12, 'Le concours d\'entrée comprend des épreuves de mathématiques, français et logique.'),
-(25, 12, 'Les tests se déroulent en mars et avril, une convocation est envoyée aux candidats inscrits.');
+(25, 12, 'Les tests se déroulent en mars et avril, une convocation est envoyée aux candidats inscrits.'),
+(26, 13, 'Vous trouverez les différents plans de formation sur la page dédiée de l’école d’informatique. Les documents dépendent de la volée (date de rentrée), et à défaut, le dernier plan en vigueur est pris en compte.'),
+(27, 13, 'Exemples de plans actuels :\n- CFC Développement d’application (FA / DUAL / PT) – août 2024\n- CFC Exploitation et infrastructure – août 2024\n- CFC Opérateur-ice informatique (DUAL / PT) – 2022-2023\n- CFC Médiamaticien-ne – dès 2023/2024\n- CFC Développeur·se de business numérique – dès 2024');
 
 --
 -- Index pour les tables déchargées

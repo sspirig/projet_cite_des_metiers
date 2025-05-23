@@ -137,6 +137,28 @@ body {
     animation: slideUp 1s ease-out;
 }
 
+.suggestions-container {
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.suggestions-container button {
+    border: none;
+    background-color: #e2e6ea;
+    color: #333;
+    padding: 5px 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.suggestions-container button:hover {
+    background-color: #d6d8db;
+}
+
+
 @keyframes slideUp {
     0% {
         transform: translate(-50%, 50%);

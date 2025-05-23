@@ -11,7 +11,7 @@ function sendMessage() {
     input.value = "";
 
     console.log(message);
-
+    
     fetch('../php/fetch.php', {
             method: 'POST',
             headers: {
@@ -39,7 +39,7 @@ function sendMessage() {
                     }
 
                     processQueue();
-                } else {
+                } else {  
                     throw new Error("Réponse invalide du serveur");
                 }
             } catch (error) {

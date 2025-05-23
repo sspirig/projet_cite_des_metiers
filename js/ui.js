@@ -27,6 +27,30 @@ function displayUserMessage(message) {
     chatBox.innerHTML += `<div class='message question'><strong>Vous :</strong> ${message}</div>`;
 }
 
+function displaySuggestedQuestions() {
+    const questions = [
+        "Combien de temps dure la formation ?",
+        "Comment se déroule les inscriptions ?",
+        "Quelles sont les différentes formations disponibles ?"
+    ];
+
+    const container = document.getElementById('suggested-questions');
+    if (!container) return;
+
+    container.innerHTML = ""; 
+
+    questions.forEach(question => {
+        const btn = document.createElement('button');
+        btn.className = "btn btn-light";
+        btn.textContent = question;
+        btn.onclick = () => {
+            document.getElementById('userInput').value = question;
+            sendMessage();
+        };
+        container.appendChild(btn);
+    });
+}
+
 function initializeChatUI() {
     let welcomeMessage = document.getElementById("welcome-message");
     setTimeout(() => {
@@ -36,5 +60,6 @@ function initializeChatUI() {
     setTimeout(() => {
         let chatContainer = document.getElementById("chat-container");
         chatContainer.classList.add("active");
+        displaySuggestedQuestions(); 
     }, 3500);
 }
