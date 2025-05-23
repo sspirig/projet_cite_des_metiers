@@ -16,6 +16,10 @@ function sendMessage() {
     let message = input.value.trim();
     if (message === "") return;
 
+    if (document.querySelector(".chat-box").innerHTML == "") {
+        document.querySelector(".input-container").style.top = "92%";
+    }
+
     displayUserMessage(message);
     input.value = "";
 

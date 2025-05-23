@@ -59,7 +59,11 @@ function initializeChatUI() {
 
     setTimeout(() => {
         let chatContainer = document.getElementById("chat-container");
+        let inputContainer = document.getElementById("input-container");
+        let suggestions = inputContainer.querySelector(".suggestions");
         chatContainer.classList.add("active");
         displaySuggestedQuestions(); 
+        inputContainer.classList.add("active");
+        suggestions.classList.add("active");
     }, 3500);
 }

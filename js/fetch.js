@@ -7,6 +7,13 @@ function sendMessage() {
     if (message === "") return;
 
     let chatBox = document.getElementById("chat-box");
+    console.log(chatBox);
+    
+    if (chatBox.innerHTML == "") {
+
+        document.querySelector("#input-container").style.top = "80%";
+    }
+
     chatBox.innerHTML += `<div class='message question'><strong>Vous :</strong> ${message}</div>`;
     input.value = "";
 
@@ -108,5 +115,8 @@ document.getElementById("userInput").addEventListener("click", function() {
 });
 
 document.getElementById("userInput").addEventListener("keypress", function(event) {
-    if (event.key === "Enter") sendMessage();
+    if (event.key === "Enter") {
+        sendMessage();
+    }
+        
 });
