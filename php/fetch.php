@@ -1,6 +1,5 @@
 <?php
 require_once 'db.php';
-
 header('Content-Type: application/json; charset=UTF-8');
 ob_clean();
 
@@ -13,55 +12,70 @@ if (!isset($data['message']) || empty(trim($data['message']))) {
 
 $userInput = strtolower(trim($data['message']));
 
-error_log("Message reçu : " . $userInput);
-
+// Étape 1 : recherche par mots-clés dans `questions`
 $stmt = $pdo->query("SELECT id, question_keywords FROM questions");
-$matchingQuestions = [];
+$matchingThemes = [];
 
 while ($row = $stmt->fetch()) {
     $keywords = json_decode($row['question_keywords'], true);
     $score = 0;
-
     foreach ($keywords as $keyword) {
-        if (strpos($userInput, $keyword) !== false) {
+        if (strpos($userInput, strtolower($keyword)) !== false) {
             $score++;
         }
     }
-
     if ($score > 0) {
-        $matchingQuestions[$row['id']] = $score;
+        $matchingThemes[$row['id']] = $score;
     }
 }
 
-if (!empty($matchingQuestions)) {
-    arsort($matchingQuestions);
-    $bestMatches = array_keys(array_slice($matchingQuestions, 0, 3, true));
+if (empty($matchingThemes)) {
+    saveUnansweredQuestion($userInput);
+    echo json_encode(["response" => "Je ne suis pas en mesure de comprendre ce que vous m'avez demandé !"]);
+    exit;
+}
 
-    $placeholders = implode(',', array_fill(0, count($bestMatches), '?'));
-    $stmt = $pdo->prepare("SELECT response_text FROM responses WHERE question_id IN ($placeholders)");
-    $stmt->execute($bestMatches);
-    $responses = $stmt->fetchAll();
+// Étape 2 : déterminer la meilleure thématique
+arsort($matchingThemes);
+$bestThemeId = array_key_first($matchingThemes);
 
-    if ($responses) {
-        echo json_encode(["response" => array_column($responses, 'response_text')]);
-        exit;
+// Étape 3 : récupérer les questions spécifiques liées à cette thématique
+$stmt = $pdo->prepare("SELECT id, question_text FROM question_complete WHERE related_question_id = ?");
+$stmt->execute([$bestThemeId]);
+$questions = $stmt->fetchAll();
+
+if (count($questions) === 1) {
+    // Une seule sous-question, on donne la réponse directe
+    $stmt = $pdo->prepare("SELECT response_text FROM responses WHERE question_id = ?");
+    $stmt->execute([$bestThemeId]);
+    $response = $stmt->fetchColumn();
+    echo json_encode(["response" => $response]);
+    exit;
+}
+
+// Sinon : plusieurs réponses disponibles => on génère des suggestions
+$suggestions = [];
+foreach ($questions as $q) {
+    $stmt = $pdo->prepare("SELECT response_text FROM responses WHERE question_id = ?");
+    $stmt->execute([$q['id']]);
+    $response = $stmt->fetchColumn();
+    if ($response) {
+        $suggestions[] = [
+            "title" => $q['question_text'],
+            "text" => $response
+        ];
     }
 }
 
-saveUnansweredQuestion($userInput);
-echo json_encode(["response" => "Je ne suis pas en mesure de comprendre ce que vous m'avez demandé !"]);
+echo json_encode([
+    "response" => "Plusieurs réponses correspondent à votre question. Veuillez choisir une option ci-dessous.",
+    "suggestions" => $suggestions
+]);
 exit;
 
-function saveUnansweredQuestion($question)
-{
+function saveUnansweredQuestion($question) {
     $file = 'unanswered_questions.json';
-
     $questions = file_exists($file) ? json_decode(file_get_contents($file), true) : [];
-
-    if (!is_array($questions)) {
-        $questions = [];
-    }
-
     if (!in_array($question, $questions)) {
         $questions[] = $question;
         file_put_contents($file, json_encode($questions, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));

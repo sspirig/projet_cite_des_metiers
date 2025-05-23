@@ -6,29 +6,13 @@ function sendMessageToServer(message) {
         },
         body: JSON.stringify({ 'message': message })
     })
-    .then(response => response.text())
-    .then(text => {
-        console.log("Réponse brute du serveur : ", text);
-        try {
-            if (text.trim().startsWith("{") || text.trim().startsWith("[")) {
-                let data = JSON.parse(text);
-                let botResponses = Array.isArray(data.response) ? data.response : [data.response];
-
-                if (botResponses.length === 0 || botResponses[0].trim() === "") {
-                    return "Désolé, je n'ai pas encore de réponse à cette question.";
-                } else {
-                    return botResponses;
-                }
-            } else {
-                throw new Error("Réponse invalide du serveur");
-            }
-        } catch (error) {
-            console.error("Erreur de parsing JSON :", error);
-            return "Désolé, il y a eu un problème avec la réponse.";
-        }
+    .then(response => response.json())
+    .then(data => {
+        let botResponses = Array.isArray(data.response) ? data.response : [data.response];
+        return botResponses.length > 0 ? botResponses : ["Désolé, je n'ai pas encore de réponse à cette question."];
     })
     .catch(error => {
-        console.error("Erreur de requête :", error);
-        return "Désolé, il y a eu un problème.";
+        console.error("Erreur :", error);
+        return ["Désolé, il y a eu un problème."];
     });
 }

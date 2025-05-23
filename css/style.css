@@ -94,11 +94,13 @@ body {
     color: white;
     align-self: flex-end;
     text-align: right;
+    max-width: 700px;
 }
 
 .response {
     background: rgba(233, 236, 239, 0.6);
     align-self: flex-start;
+    max-width: 700px;
 }
 
 .input-group {

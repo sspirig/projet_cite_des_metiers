@@ -16,18 +16,18 @@ function sendMessage() {
     let message = input.value.trim();
     if (message === "") return;
 
-    if (document.querySelector(".chat-box").innerHTML == "") {
-        document.querySelector(".input-container").style.top = "92%";
-    }
-
     displayUserMessage(message);
     input.value = "";
 
-    sendMessageToServer(message).then(response => {
-        if (Array.isArray(response)) {
-            response.forEach(msg => addMessageToQueue(msg));
+    sendMessageToServer(message).then(data => {
+        if (typeof data === "object" && data.suggestions) {
+            addMessageToQueue(data.response);
+            displaySuggestions(data.suggestions);
+        } else if (Array.isArray(data)) {
+            data.forEach(msg => addMessageToQueue(msg));
         } else {
-            addMessageToQueue(response);
+            addMessageToQueue(data);
         }
     });
 }
+

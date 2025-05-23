@@ -1,11 +1,11 @@
 function typeResponse(text, callback) {
-    let chatBox = document.getElementById("chat-box");
-    let responseDiv = document.createElement("div");
+    const chatBox = document.getElementById("chat-box");
+    const responseDiv = document.createElement("div");
     responseDiv.classList.add("message", "response");
     responseDiv.innerHTML = `<strong>Chatbot :</strong> <span class="typing"></span>`;
     chatBox.appendChild(responseDiv);
 
-    let typingSpan = responseDiv.querySelector(".typing");
+    const typingSpan = responseDiv.querySelector(".typing");
     let index = 0;
 
     function typeCharacter() {
@@ -23,8 +23,12 @@ function typeResponse(text, callback) {
 }
 
 function displayUserMessage(message) {
-    let chatBox = document.getElementById("chat-box");
-    chatBox.innerHTML += `<div class='message question'><strong>Vous :</strong> ${message}</div>`;
+    const chatBox = document.getElementById("chat-box");
+    const messageDiv = document.createElement("div");
+    messageDiv.className = "message question";
+    messageDiv.innerHTML = `<strong>Vous :</strong> ${message}`;
+    chatBox.appendChild(messageDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
 }
 
 function displaySuggestedQuestions() {
@@ -34,36 +38,55 @@ function displaySuggestedQuestions() {
         "Quelles sont les différentes formations disponibles ?"
     ];
 
-    const container = document.getElementById('suggested-questions');
+    const container = document.getElementById("suggested-questions");
     if (!container) return;
 
-    container.innerHTML = ""; 
+    container.innerHTML = "";
 
     questions.forEach(question => {
-        const btn = document.createElement('button');
+        const btn = document.createElement("button");
         btn.className = "btn btn-light";
         btn.textContent = question;
         btn.onclick = () => {
-            document.getElementById('userInput').value = question;
+            document.getElementById("userInput").value = question;
             sendMessage();
         };
         container.appendChild(btn);
     });
+
+    document.getElementById("suggestions-container").style.display = "block";
+}
+
+function displaySuggestions(suggestions) {
+    const container = document.getElementById("suggested-questions");
+    container.innerHTML = "";
+
+    suggestions.forEach(item => {
+        const btn = document.createElement("button");
+        btn.className = "btn btn-outline-primary";
+        btn.textContent = item.title;
+        btn.onclick = () => {
+            addMessageToQueue(item.text); // affiche la réponse directement
+            container.innerHTML = "";      // vide les suggestions
+            document.getElementById("suggestions-container").style.display = "none";
+        };
+        container.appendChild(btn);
+    });
+
+    document.getElementById("suggestions-container").style.display = "block";
 }
 
 function initializeChatUI() {
-    let welcomeMessage = document.getElementById("welcome-message");
+    const welcomeMessage = document.getElementById("welcome-message");
     setTimeout(() => {
         welcomeMessage.style.opacity = "0";
     }, 3000);
 
     setTimeout(() => {
-        let chatContainer = document.getElementById("chat-container");
-        let inputContainer = document.getElementById("input-container");
-        let suggestions = inputContainer.querySelector(".suggestions");
-        chatContainer.classList.add("active");
-        displaySuggestedQuestions(); 
-        inputContainer.classList.add("active");
-        suggestions.classList.add("active");
+        document.getElementById("chat-container").classList.add("active");
+        document.getElementById("input-container").classList.add("active");
+        displaySuggestedQuestions(); // suggestions initiales
     }, 3500);
+
+    document.getElementById("suggestions-container").style.display = "none"; // masqué au départ
 }

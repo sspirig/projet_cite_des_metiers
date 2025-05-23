@@ -28,10 +28,13 @@
         <div class="chat-box" id="chat-box"></div>
     </div>
     <div class="input-container" id="input-container">
-        <div class="suggestions">
-
+        <div class="suggestions-container" id="suggestions-container" class="mb-3">
+            <p>Suggestions :</p>
+            <div id="suggested-questions" class="d-flex flex-wrap gap-2">
+                
+            </div>
         </div>
-
+        
         <div class="input-group">
             <input type="text" id="userInput" class="form-control" placeholder="Posez votre question..." required>
             <button onclick="sendMessage()" id="btnChat" class="btn btn-primary">Envoyer</button>
