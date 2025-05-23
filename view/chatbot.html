@@ -11,7 +11,14 @@
 <!--
     NOTE:
     il faut faire en sorte de verifier le nombre de questions associées a un key word (ou une thématique si on veut ameliorer la bdd) et si y'en a plus qu'un bah on liste les propositions de reponse, genre un text "resumé" exemple inscription en cfc mediamaticien, inscription en cfc...
--->
+            <div class="suggestions-container" id="suggestions-container" class="mb-3">
+            <p>Suggestions :</p>
+            <div id="suggested-questions" class="d-flex flex-wrap gap-2">
+                
+            </div>
+        </div>
+    -->
+
 <body>
     <div class="background-overlay"></div>
     <div class="welcome-message" id="welcome-message">
@@ -19,18 +26,16 @@
     </div>
     <div class="chat-container" id="chat-container">
         <div class="chat-box" id="chat-box"></div>
-        <div class="suggestions-container" id="suggestions-container" class="mb-3">
-            <p>Suggestions :</p>
-            <div id="suggested-questions" class="d-flex flex-wrap gap-2">
-                
-            </div>
+    </div>
+    <div class="input-container" id="input-container">
+        <div class="suggestions">
+
         </div>
 
         <div class="input-group">
             <input type="text" id="userInput" class="form-control" placeholder="Posez votre question..." required>
             <button onclick="sendMessage()" id="btnChat" class="btn btn-primary">Envoyer</button>
         </div>
-
     </div>
 
     <script src="../js/chatbot.js"></script>
