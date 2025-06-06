@@ -1,3 +1,9 @@
+/**
+ * Projet: projet_cite_des_metiers
+ * Fichier: chatbot.js
+ * Auteurs: Louis.RBNSN, Zackary.IST, Santiago.SPRG
+ * Date: 06.06.2025
+ */
 let messageQueue = [];
 let isTyping = false;
 
@@ -8,9 +14,9 @@ function processQueue() {
     const next = messageQueue.shift();
 
     if (typeof next === "function") {
-        next(); // exécute une fonction comme displaySuggestions()
+        next();
         isTyping = false;
-        processQueue(); // continue la queue
+        processQueue();
     } else {
         typeResponse(next, () => {
             isTyping = false;
@@ -23,3 +29,4 @@ function addMessageToQueue(message) {
     messageQueue.push(message);
     processQueue();
 }
+

@@ -21,16 +21,23 @@ function sendMessage() {
 
     document.getElementById("input-container").classList.add("fixed-bottom");
 
-    sendMessageToServer(message).then(data => {
+    let data = sendMessageToServer(message).then(data => {
         if (typeof data === "object" && data.suggestions) {
-            addMessageToQueue(data.response); // le message "Voici plusieurs réponses..."
-            messageQueue.push(() => displaySuggestions(data.suggestions)); // suggestions dynamiques
+            
+            addMessageToQueue(data.response);
+            
+            messageQueue.push(() => displaySuggestions(data.suggestions));
         } else if (Array.isArray(data)) {
             data.forEach(msg => addMessageToQueue(msg));
         } else {
             addMessageToQueue(data);
         }
+
     });
+    console.log(data);
+
+
+
 
 
 

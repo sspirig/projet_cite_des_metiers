@@ -1,3 +1,5 @@
+
+
 function typeResponse(text, callback) {
     const chatBox = document.getElementById("chat-box");
     const responseDiv = document.createElement("div");
@@ -31,34 +33,75 @@ function displayUserMessage(message) {
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-
-function displaySuggestions(suggestions) {
+function handleSuggestionClick(questionText) {
     const chatBox = document.getElementById("chat-box");
 
-    const suggestionDiv = document.createElement("div");
-    suggestionDiv.className = "message response";
-    suggestionDiv.innerHTML = `
+    chatBox.innerHTML += `<div class='message question'><strong>Vous :</strong> ${questionText}</div>`;
+    document.getElementById("userInput").value = "";
+
+    fetch('../php/fetch.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: questionText })
+    })
+        .then(res => res.text())
+        .then(text => {
+            try {
+                let data = JSON.parse(text);
+
+                if (data.response) {
+                    const responses = Array.isArray(data.response) ? data.response : [data.response];
+                    responses.forEach(resp => messageQueue.push(resp));
+                }
+
+                processQueue();
+            } catch (e) {
+                messageQueue.push("Désolé, une erreur est survenue.");
+                processQueue();
+            }
+        })
+        .catch(error => {
+            console.error("Erreur fetch suggestion :", error);
+            messageQueue.push("Erreur lors du traitement de la suggestion.");
+            processQueue();
+        });
+}
+
+
+
+
+function displaySuggestions(suggestions) {
+    try {
+        const chatBox = document.getElementById("chat-box");
+
+        const suggestionDiv = document.createElement("div");
+        suggestionDiv.className = "message response";
+        suggestionDiv.innerHTML = `
         <strong>Chatbot :</strong>
         <p class="mb-2 mt-1">Voici quelques options à explorer :</p>
         <div class="suggestion-buttons d-flex flex-wrap gap-2"></div>
-    `;
+        `;
 
-    const buttonContainer = suggestionDiv.querySelector(".suggestion-buttons");
+        const buttonContainer = suggestionDiv.querySelector(".suggestion-buttons");
+        console.log("Suggestions reçues :", suggestions);
+        suggestions.forEach(item => {
+            const btn = document.createElement("button");
+            btn.innerHTML = item.title;
+            btn.classList.add("btn", "btn-outline-primary");
+            btn.onclick = () => {
+                handleSuggestionClick(item.title);
+            };
 
-    suggestions.forEach(item => {
-        const btn = document.createElement("button");
-        btn.textContent = item.title;
-        btn.onclick = () => {
-            document.getElementById("userInput").value = item.title;
-            sendMessage();
-        };
-        buttonContainer.appendChild(btn);
-    });
+            buttonContainer.appendChild(btn);
+        });
 
-    chatBox.appendChild(suggestionDiv);
-    chatBox.scrollTop = chatBox.scrollHeight;
+        chatBox.appendChild(suggestionDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    } catch (error) {
+        console.error(error);
+    }
+
 }
-
 
 
 
@@ -73,4 +116,5 @@ function initializeChatUI() {
         document.getElementById("input-container").classList.add("active");
     }, 3500);
 }
+
 

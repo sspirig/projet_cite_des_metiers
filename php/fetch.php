@@ -1,4 +1,10 @@
 <?php
+/**
+ * Projet: projet_cite_des_metiers
+ * Fichier: fetch.php
+ * Auteurs: Louis.RBNSN, Zackary.IST, Santiago.SPRG
+ * Date: 06.06.2025
+ */
 require_once 'db.php';
 header('Content-Type: application/json; charset=UTF-8');
 ob_clean();
@@ -11,6 +17,19 @@ if (!isset($data['message']) || empty(trim($data['message']))) {
 }
 
 $userInput = strtolower(trim($data['message']));
+// Vérifie si le texte correspond exactement à une question complète
+$stmt = $pdo->prepare("SELECT qc.id, r.response_text 
+                       FROM question_complete qc 
+                       JOIN responses r ON r.question_id = qc.id 
+                       WHERE LOWER(TRIM(qc.question_text)) = ?");
+$stmt->execute([$userInput]);
+$exactMatch = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if ($exactMatch) {
+    echo json_encode(["response" => $exactMatch['response_text']]);
+    exit;
+}
+
 
 // Étape 1 : recherche toutes les thématiques correspondant au message
 $stmt = $pdo->query("SELECT id, question_keywords FROM questions");
