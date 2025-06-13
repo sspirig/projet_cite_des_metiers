@@ -88,9 +88,9 @@ function displaySuggestions(suggestions) {
             const btn = document.createElement("button");
             btn.innerHTML = item.title;
             btn.classList.add("btn", "btn-outline-primary");
-            btn.onclick = () => {
+            btn.addEventListener("click", () => {
                 handleSuggestionClick(item.title);
-            };
+            });
 
             buttonContainer.appendChild(btn);
         });

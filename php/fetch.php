@@ -32,11 +32,11 @@ if ($exactMatch) {
 
 
 // Étape 1 : recherche toutes les thématiques correspondant au message
-$stmt = $pdo->query("SELECT id, question_keywords FROM questions");
+$stmt = $pdo->query("SELECT id, keywords FROM question_complete");
 $matchedThemeIds = [];
 
 while ($row = $stmt->fetch()) {
-    $keywords = json_decode($row['question_keywords'], true);
+    $keywords = json_decode($row['keywords'], true);
     foreach ($keywords as $keyword) {
         if (strpos($userInput, strtolower($keyword)) !== false) {
             $matchedThemeIds[] = $row['id'];
