@@ -1,74 +1,80 @@
 <?php
 /**
  * Projet: projet_cite_des_metiers
- * Fichier: fetch.php
- * Auteurs: Louis.RBNSN, Zackary.IST, Santiago.SPRG
- * Date: 06.06.2025
+ * Fichier: fetch.php (version améliorée)
+ * Date: 09.09.2025
  */
 require_once 'db.php';
 header('Content-Type: application/json; charset=UTF-8');
 ob_clean();
 
+// 1. Récupérer et normaliser l'entrée utilisateur
 $data = json_decode(file_get_contents('php://input'), true);
-
 if (!isset($data['message']) || empty(trim($data['message']))) {
     echo json_encode(["response" => "Je n'ai pas compris votre question."]);
     exit;
 }
+$userInput = trim($data['message']);
+$normalizedInput = normalizeText($userInput);
 
-$userInput = strtolower(trim($data['message']));
-// Vérifie si le texte correspond exactement à une question complète
-$stmt = $pdo->prepare("SELECT qc.id, r.response_text 
-                       FROM question_complete qc 
-                       JOIN responses r ON r.question_id = qc.id 
-                       WHERE LOWER(TRIM(qc.question_text)) = ?");
+// 2. Vérifier si la question correspond exactement à une question complète
+$stmt = $pdo->prepare("
+    SELECT qc.id, r.response_text
+    FROM question_complete qc
+    JOIN responses r ON r.question_id = qc.id
+    WHERE LOWER(TRIM(qc.question_text)) = LOWER(TRIM(?))
+");
 $stmt->execute([$userInput]);
 $exactMatch = $stmt->fetch(PDO::FETCH_ASSOC);
-
 if ($exactMatch) {
     echo json_encode(["response" => $exactMatch['response_text']]);
     exit;
 }
 
+// 3. Récupérer tous les mots-clés (simples et composés) depuis la base, triés par longueur décroissante
+$stmt = $pdo->query("
+    SELECT id, keyword AS motClef
+    FROM keywords
+    ORDER BY LENGTH(keyword) DESC
+");
+$motsCles = $stmt->fetchAll();
 
-// Étape 1 : recherche toutes les thématiques correspondant au message
-$stmt = $pdo->query("SELECT id, keywords FROM question_complete");
-$matchedThemeIds = [];
+// 4. Extraire les mots-clés composés et simples
+$matchedKeywordIds = extractKeywords($normalizedInput, $motsCles);
 
-while ($row = $stmt->fetch()) {
-    $keywords = json_decode($row['keywords'], true);
-    foreach ($keywords as $keyword) {
-        if (strpos($userInput, strtolower($keyword)) !== false) {
-            $matchedThemeIds[] = $row['id'];
-            break; // Une seule correspondance suffit par thématique
-        }
-    }
-}
-
-if (empty($matchedThemeIds)) {
+if (empty($matchedKeywordIds)) {
     saveUnansweredQuestion($userInput);
     echo json_encode(["response" => "Je ne suis pas en mesure de comprendre ce que vous m'avez demandé !"]);
     exit;
 }
 
-// Étape 2 : pour toutes les thématiques matched, récupérer les questions détaillées
-$placeholders = implode(',', array_fill(0, count($matchedThemeIds), '?'));
-$stmt = $pdo->prepare("SELECT id, question_text, related_question_id FROM question_complete WHERE related_question_id IN ($placeholders)");
-$stmt->execute($matchedThemeIds);
+// 5. Trouver les questions associées aux mots-clés trouvés
+$placeholders = implode(',', array_fill(0, count($matchedKeywordIds), '?'));
+$stmt = $pdo->prepare("
+    SELECT DISTINCT qc.id, qc.question_text, qc.related_question_id
+    FROM question_complete qc
+    JOIN question_keywords qk ON qk.question_id = qc.id
+    WHERE qk.keyword_id IN ($placeholders)
+");
+$stmt->execute($matchedKeywordIds);
 $questions = $stmt->fetchAll();
 
 if (count($questions) === 0) {
-    // Si aucune question complète, afficher réponse brute des thématiques principales
-    $stmt = $pdo->prepare("SELECT response_text FROM responses WHERE question_id IN ($placeholders)");
-    $stmt->execute($matchedThemeIds);
+    // Si aucune question, retourner les réponses des thématiques principales
+    $stmt = $pdo->prepare("
+        SELECT DISTINCT r.response_text
+        FROM responses r
+        JOIN question_keywords qk ON qk.question_id = r.question_id
+        WHERE qk.keyword_id IN ($placeholders)
+    ");
+    $stmt->execute($matchedKeywordIds);
     $responses = $stmt->fetchAll(PDO::FETCH_COLUMN);
-
-    echo json_encode(["response" => implode("\n\n", $responses)]);
+    echo json_encode(["response" => implode("\n\n", array_unique($responses))]);
     exit;
 }
 
 if (count($questions) === 1) {
-    // Une seule question complète = réponse directe
+    // Une seule question = réponse directe
     $stmt = $pdo->prepare("SELECT response_text FROM responses WHERE question_id = ?");
     $stmt->execute([$questions[0]['id']]);
     $response = $stmt->fetchColumn();
@@ -76,13 +82,12 @@ if (count($questions) === 1) {
     exit;
 }
 
-// Sinon, on retourne toutes les suggestions regroupées
+// 6. Sinon, retourner les suggestions
 $suggestions = [];
 foreach ($questions as $q) {
     $stmt = $pdo->prepare("SELECT response_text FROM responses WHERE question_id = ?");
     $stmt->execute([$q['id']]);
     $response = $stmt->fetchColumn();
-
     if ($response) {
         $suggestions[] = [
             "title" => $q['question_text'],
@@ -90,18 +95,42 @@ foreach ($questions as $q) {
         ];
     }
 }
-
-error_log(print_r([
-  "response" => $response,
-  "suggestions" => $suggestions
-], true));
-
-
 echo json_encode([
     "response" => "Voici plusieurs réponses en lien avec votre question :",
     "suggestions" => $suggestions
 ]);
-exit;
+
+// --- Fonctions utilitaires ---
+function normalizeText($text) {
+    // Supprimer ponctuation et espaces multiples, convertir en minuscules
+    $text = preg_replace('/[^\w\s]/u', ' ', $text);
+    $text = preg_replace('/\s+/', ' ', $text);
+    return strtolower(trim($text));
+}
+
+function extractKeywords($text, $motsCles) {
+    $matchedIds = [];
+    $remainingText = $text;
+    // D'abord, chercher les mots-clés composés
+    foreach ($motsCles as $motCle) {
+        $pattern = '/\b' . preg_quote($motCle['motClef'], '/') . '\b/u';
+        if (preg_match($pattern, $text, $matches)) {
+            $matchedIds[] = $motCle['id'];
+            // Supprimer le mot-clé trouvé du texte restant
+            $remainingText = str_replace($matches[0], '', $remainingText);
+        }
+    }
+    // Ensuite, segmenter les mots simples restants (optionnel, si besoin)
+    $remainingWords = preg_split('/\s+/', trim($remainingText));
+    $stopwords = ['le', 'la', 'de', 'des', 'et', 'est', 'que', 'qui', 'à', 'pour', 'en', 'un', 'une', 'du'];
+    foreach ($remainingWords as $word) {
+        if (!in_array($word, $stopwords) && strlen($word) > 2) {
+            // Ici, tu pourrais chercher si le mot simple existe en base
+            // et ajouter son id à $matchedIds si oui
+        }
+    }
+    return array_unique($matchedIds);
+}
 
 function saveUnansweredQuestion($question) {
     $file = __DIR__ . '/unanswered_questions.json';
@@ -111,3 +140,4 @@ function saveUnansweredQuestion($question) {
         file_put_contents($file, json_encode($questions, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
     }
 }
+?>
