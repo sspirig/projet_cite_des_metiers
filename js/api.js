@@ -25,4 +25,6 @@ function sendMessageToServer(message){
         console.error("Erreur :", error);
         return ["Désolé, il y a eu un problème."];
     });
+    
 }
+

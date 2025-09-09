@@ -76,20 +76,22 @@ function displaySuggestions(suggestions) {
 
         const suggestionDiv = document.createElement("div");
         suggestionDiv.className = "message response";
+        suggestionDiv.id = "suggestionDiv";
         suggestionDiv.innerHTML = `
-        <strong>Chatbot :</strong>
-        <p class="mb-2 mt-1">Voici quelques options à explorer :</p>
         <div class="suggestion-buttons d-flex flex-wrap gap-2"></div>
         `;
 
         const buttonContainer = suggestionDiv.querySelector(".suggestion-buttons");
+
         console.log("Suggestions reçues :", suggestions);
+
         suggestions.forEach(item => {
             const btn = document.createElement("button");
             btn.innerHTML = item.title;
             btn.classList.add("btn", "btn-outline-primary");
             btn.addEventListener("click", () => {
                 handleSuggestionClick(item.title);
+                addClickEventSuggestions();
             });
 
             buttonContainer.appendChild(btn);

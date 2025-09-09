@@ -23,9 +23,9 @@ function sendMessage() {
 
     let data = sendMessageToServer(message).then(data => {
         if (typeof data === "object" && data.suggestions) {
-            
+
             addMessageToQueue(data.response);
-            
+
             messageQueue.push(() => displaySuggestions(data.suggestions));
         } else if (Array.isArray(data)) {
             data.forEach(msg => addMessageToQueue(msg));
@@ -33,15 +33,24 @@ function sendMessage() {
             addMessageToQueue(data);
         }
 
-    });
+    })
     console.log(data);
-
-
-
-
-
-
 }
 
+function addClickEventSuggestions() {
+    const chatbox = document.querySelector(".chat-box");
+    
+    const suggestions = chatbox.querySelectorAll("#suggestionDiv");
+    
+    suggestions.forEach(div => {
+    
+        div.querySelectorAll("button").forEach(btn => {
+            console.info(btn.innerHTML);
+            btn.addEventListener("click", () => {
+                handleSuggestionClick(btn.innerHTML);
+                addClickEventSuggestions();
+            });
+        })
+    })
 
-
+}

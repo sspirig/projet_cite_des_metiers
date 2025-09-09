@@ -91,7 +91,7 @@ body {
     background-color: rgba(0, 123, 255, 0.6);
     color: white;
     align-self: flex-end;
-    text-align: right;
+    text-align: left;
     max-width: 700px;
 }
 
