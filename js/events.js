@@ -11,6 +11,24 @@ function setupEventListeners() {
     document.getElementById("btnChat").addEventListener("click", sendMessage);
 }
 
+function addClickEventSuggestions() {
+    const chatbox = document.querySelector(".chat-box");
+    
+    const suggestions = chatbox.querySelectorAll("#suggestionDiv");
+    
+    suggestions.forEach(div => {
+    
+        div.querySelectorAll("button").forEach(btn => {
+            console.info(btn.innerHTML);
+            btn.addEventListener("click", () => {
+                handleSuggestionClick(btn.innerHTML);
+                addClickEventSuggestions();
+            });
+        })
+    })
+
+}
+
 function sendMessage() {
     const input = document.getElementById("userInput");
     const message = input.value.trim();
@@ -37,20 +55,4 @@ function sendMessage() {
     console.log(data);
 }
 
-function addClickEventSuggestions() {
-    const chatbox = document.querySelector(".chat-box");
-    
-    const suggestions = chatbox.querySelectorAll("#suggestionDiv");
-    
-    suggestions.forEach(div => {
-    
-        div.querySelectorAll("button").forEach(btn => {
-            console.info(btn.innerHTML);
-            btn.addEventListener("click", () => {
-                handleSuggestionClick(btn.innerHTML);
-                addClickEventSuggestions();
-            });
-        })
-    })
 
-}
