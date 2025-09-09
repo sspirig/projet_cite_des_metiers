@@ -27,7 +27,7 @@ INSERT INTO mot_clef (idMotClef, motClef) VALUES (1, 'CFC');
 INSERT INTO mot_clef (idMotClef, motClef) VALUES (2, 'formation');
 INSERT INTO mot_clef (idMotClef, motClef) VALUES (3, 'durée');
 INSERT INTO mot_clef (idMotClef, motClef) VALUES (4, 'plein temps');
-INSERT INTO mot_clef (idMotClef, motClef) VALUES (5, 'développement d’applications');
+INSERT INTO mot_clef (idMotClef, motClef) VALUES (5, 'développement');
 INSERT INTO mot_clef (idMotClef, motClef) VALUES (6, 'plan');
 INSERT INTO mot_clef (idMotClef, motClef) VALUES (7, 'date');
 INSERT INTO mot_clef (idMotClef, motClef) VALUES (8, 'août 2024');
