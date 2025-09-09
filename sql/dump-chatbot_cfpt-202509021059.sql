@@ -48,7 +48,7 @@ DROP TABLE IF EXISTS `questions`;
 /*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `questions` (
   `idQuestion` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `question` varchar(100) NOT NULL,
+  `question` varchar(200) NOT NULL,
   `idReponse` int(10) unsigned NOT NULL,
   PRIMARY KEY (`idQuestion`),
   KEY `questions_reponses_FK` (`idReponse`),
@@ -100,7 +100,7 @@ DROP TABLE IF EXISTS `reponses`;
 /*!40101 SET character_set_client = utf8mb4 */;
 CREATE TABLE `reponses` (
   `idReponse` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `reponse` varchar(100) NOT NULL,
+  `reponse` varchar(200) NOT NULL,
   PRIMARY KEY (`idReponse`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
