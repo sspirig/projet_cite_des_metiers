@@ -1,11 +1,8 @@
 <?php
-$host = 'localhost';
-$dbname = 'chatbot_cfpt';
-$username = 'root'; 
-$password = 'SuperKey1';
+include_once "./const.php";
 
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password, [
+    $pdo = new PDO("mysql:host=".DB_HOST.";dbname=".DB_NAME.";charset=utf8mb4", DB_USERNAME, DB_PASSWORD, [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
     ]);
