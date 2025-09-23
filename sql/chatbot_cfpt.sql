@@ -327,6 +327,14 @@ INSERT INTO `reponses` (`idReponse`, `reponse`) VALUES
 (25, 'Travail Pratique Individuel.'),
 (26, 'Maturité Professionnelle Technique.');
 
+
+
+CREATE TABLE historique (
+    id_historique INT AUTO_INCREMENT PRIMARY KEY,
+    date_conversation DATETIME DEFAULT CURRENT_TIMESTAMP,
+    conversation_json JSON NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 --
 -- Index pour les tables déchargées
 --
