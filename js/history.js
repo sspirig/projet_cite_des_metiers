@@ -38,15 +38,23 @@ function loadConversationList() {
                 li.dataset.id = conv.id_historique;
                 li.style.cursor = 'pointer';
                 li.onclick = () => loadConversationDetail(conv.id_historique);
-                const deleteBtn = document.createElement('div');
+
+                // Ajout du bouton de suppression
+                const deleteBtn = document.createElement('span');
                 deleteBtn.textContent = '🗑️';
-                deleteBtn.style.marginLeft = '15px';
-                li.appendChild(deleteBtn);
+                deleteBtn.title = 'Supprimer';
+                deleteBtn.style.marginLeft = '10px';
+                deleteBtn.style.cursor = 'pointer';
                 deleteBtn.onclick = (e) => {
                     e.stopPropagation();
-                    fetch(`../php/history.php?action=delete&id=${conv.id_historique}`, { method: 'DELETE' })
-                        .then(() => loadConversationList());
+                    if (confirm('Supprimer cette conversation ?')) {
+                        fetch(`../php/history.php?action=delete&id=${conv.id_historique}`, { method: 'GET' })
+                            .then(res => res.json())
+                            .then(() => loadConversationList());
+                    }
                 };
+                li.appendChild(deleteBtn);
+
                 sidebar.appendChild(li);
             });
         });

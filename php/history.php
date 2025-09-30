@@ -5,7 +5,6 @@ header('Content-Type: application/json; charset=UTF-8');
 $action = $_GET['action'] ?? '';
 
 if ($action === 'save') {
-    // Enregistrer le HTML de la conversation
     $data = json_decode(file_get_contents('php://input'), true);
     if (!isset($data['conversation_html']) || !is_string($data['conversation_html'])) {
         http_response_code(400);
@@ -19,7 +18,6 @@ if ($action === 'save') {
 }
 
 if ($action === 'list') {
-    // Liste des conversations
     $stmt = $pdo->query("SELECT id_historique, date_conversation FROM historique ORDER BY date_conversation DESC");
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     echo json_encode($result, JSON_UNESCAPED_UNICODE);
@@ -27,7 +25,6 @@ if ($action === 'list') {
 }
 
 if ($action === 'get') {
-    // Détail d'une conversation (HTML brut)
     $id = intval($_GET['id'] ?? 0);
     $stmt = $pdo->prepare("SELECT conversation_html FROM historique WHERE id_historique = ?");
     $stmt->execute([$id]);
@@ -36,6 +33,19 @@ if ($action === 'get') {
         echo json_encode(['conversation_html' => $row['conversation_html']]);
     } else {
         echo json_encode(['conversation_html' => '']);
+    }
+    exit;
+}
+
+if ($action === 'delete') {
+    $id = intval($_GET['id'] ?? 0);
+    if ($id > 0) {
+        $stmt = $pdo->prepare("DELETE FROM historique WHERE id_historique = ?");
+        $stmt->execute([$id]);
+        echo json_encode(['success' => true]);
+    } else {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'error' => 'ID manquant ou invalide']);
     }
     exit;
 }
