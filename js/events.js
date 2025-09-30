@@ -35,22 +35,25 @@ function sendMessage() {
     if (message === "") return;
 
     displayUserMessage(message);
+    addToConversation('user', message); // Ajout historique
     input.value = "";
 
     document.getElementById("input-container").classList.add("fixed-bottom");
 
     let data = sendMessageToServer(message).then(data => {
         if (typeof data === "object" && data.suggestions) {
-
             addMessageToQueue(data.response);
-
+            addToConversation('bot', data.response); // Ajout historique
             messageQueue.push(() => displaySuggestions(data.suggestions));
         } else if (Array.isArray(data)) {
-            data.forEach(msg => addMessageToQueue(msg));
+            data.forEach(msg => {
+                addMessageToQueue(msg);
+                addToConversation('bot', msg); // Ajout historique
+            });
         } else {
             addMessageToQueue(data);
+            addToConversation('bot', data); // Ajout historique
         }
-
     })
     console.log(data);
 }

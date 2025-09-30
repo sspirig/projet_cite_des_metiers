@@ -239,6 +239,24 @@ body {
     color: white;
 }
 
+#conversation-list {
+    list-style: none;
+    padding-left: 10px;
+    margin: 0;
+}
+#conversation-list li {
+    color: #dfe5eb;
+    cursor: pointer;
+    padding: 8px 0 8px 10px;
+    border-left: 2px solid transparent;
+    transition: background 0.2s, border-color 0.2s;
+}
+#conversation-list li:hover {
+    background: rgba(89, 187, 233, 0.1);
+    border-left: 2px solid #0777d3;
+    color: #c5edff;
+}
+
 /* Sidebar */
 nav#sidebar {
     position: fixed;

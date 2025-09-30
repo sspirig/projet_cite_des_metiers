@@ -14,8 +14,9 @@
     <div class="menu-trigger"></div>
     <nav id="sidebar">
         <ul>
-            <li>Nouveau chat</li>
+            <li id="new-chat-btn">Nouveau chat</li>
             <li>Chats</li>
+            <ul id="conversation-list"></ul>
         </ul>
     </nav>
     <div class="welcome-message" id="welcome-message">
@@ -36,11 +37,24 @@
     <script src="../js/ui.js"></script>
     <script src="../js/events.js"></script>
     <script src="../js/sidebar.js"></script>
+    <script src="../js/history.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             initializeChatUI();
             setupEventListeners();
+            loadConversationList();
+            document.getElementById('new-chat-btn').onclick = () => {
+                saveConversation();
+                document.getElementById('chat-box').innerHTML = '';
+                currentConversation = [];
+            };
         });
+
+        document.getElementById('new-chat-btn').onclick = function () {
+            saveConversation();
+            document.getElementById('chat-box').innerHTML = '';
+            currentConversation = [];
+        };
     </script>
 
 </body>
