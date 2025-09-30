@@ -38,6 +38,15 @@ function loadConversationList() {
                 li.dataset.id = conv.id_historique;
                 li.style.cursor = 'pointer';
                 li.onclick = () => loadConversationDetail(conv.id_historique);
+                const deleteBtn = document.createElement('div');
+                deleteBtn.textContent = '🗑️';
+                deleteBtn.style.marginLeft = '15px';
+                li.appendChild(deleteBtn);
+                deleteBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    fetch(`../php/history.php?action=delete&id=${conv.id_historique}`, { method: 'DELETE' })
+                        .then(() => loadConversationList());
+                };
                 sidebar.appendChild(li);
             });
         });

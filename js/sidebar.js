@@ -9,8 +9,10 @@ if (menuTrigger) {
         console.info(menuTrigger.textContent);
         if (menuTrigger.textContent == "☰") {
             menuTrigger.textContent = "✖";
+
         } else if (menuTrigger.textContent == "✖") {
             menuTrigger.textContent = "☰";
         }
     });
 }
+
