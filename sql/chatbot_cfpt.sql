@@ -331,9 +331,9 @@ INSERT INTO `reponses` (`idReponse`, `reponse`) VALUES
 
 CREATE TABLE historique (
     id_historique INT AUTO_INCREMENT PRIMARY KEY,
-    date_conversation DATETIME DEFAULT CURRENT_TIMESTAMP,
-    conversation_json JSON NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    date_conversation DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    conversation_html LONGTEXT NOT NULL
+);
 
 --
 -- Index pour les tables déchargées
