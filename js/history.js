@@ -5,15 +5,25 @@ function addToConversation(role, message) {
 }
 
 function saveConversation() {
-    if (currentConversation.length === 0) return;
+    const chatBox = document.getElementById('chat-box');
+    const conversationHTML = chatBox.innerHTML;
+    if (!conversationHTML.trim()) return;
     fetch('../php/history.php?action=save', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ conversation: currentConversation })
+        body: JSON.stringify({ conversation_html: conversationHTML })
     }).then(() => {
-        currentConversation = [];
         loadConversationList();
     });
+}
+
+function loadConversationDetail(id) {
+    fetch(`../php/history.php?action=get&id=${id}`)
+        .then(res => res.json())
+        .then(data => {
+            const chatBox = document.getElementById('chat-box');
+            chatBox.innerHTML = data.conversation_html || '';
+        });
 }
 
 function loadConversationList() {
@@ -26,24 +36,11 @@ function loadConversationList() {
                 const li = document.createElement('li');
                 li.textContent = `Chat du ${new Date(conv.date_conversation).toLocaleString()}`;
                 li.dataset.id = conv.id_historique;
+                li.style.cursor = 'pointer';
                 li.onclick = () => loadConversationDetail(conv.id_historique);
                 sidebar.appendChild(li);
             });
         });
 }
 
-function loadConversationDetail(id) {
-    fetch(`../php/history.php?action=get&id=${id}`)
-        .then(res => res.json())
-        .then(messages => {
-            const chatBox = document.getElementById('chat-box');
-            chatBox.innerHTML = '';
-            messages.forEach(msg => {
-                if (msg.role === 'user') {
-                    displayUserMessage(msg.message);
-                } else {
-                    typeResponse(msg.message, () => {});
-                }
-            });
-        });
-}
+window.addEventListener('DOMContentLoaded', loadConversationList);
