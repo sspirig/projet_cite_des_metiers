@@ -20,7 +20,13 @@ function saveConversation() {
 function loadConversationDetail(id) {
     fetch(`../php/history.php?action=get&id=${id}`)
         .then(res => res.json())
-        .then(data => {
+        .then(data => { 
+            console.log(document.getElementById("input-container").classList.contains("fixed-bottom"));
+            
+            if (!document.getElementById("input-container").classList.contains("fixed-bottom")) {
+                document.getElementById("input-container").classList.add("fixed-bottom");
+            }
+
             const chatBox = document.getElementById('chat-box');
             chatBox.innerHTML = data.conversation_html || '';
         });
@@ -39,10 +45,11 @@ function loadConversationList() {
                 li.style.cursor = 'pointer';
                 li.onclick = () => loadConversationDetail(conv.id_historique);
 
-                // Ajout du bouton de suppression
+
                 const deleteBtn = document.createElement('span');
                 deleteBtn.textContent = '🗑️';
                 deleteBtn.title = 'Supprimer';
+                deleteBtn.classList.add('prevent-select');
                 deleteBtn.style.marginLeft = '10px';
                 deleteBtn.style.cursor = 'pointer';
                 deleteBtn.onclick = (e) => {
