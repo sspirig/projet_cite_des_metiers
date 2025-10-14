@@ -13,6 +13,8 @@ if (menuTrigger) {
         } else if (menuTrigger.textContent == "✖") {
             menuTrigger.textContent = "☰";
         }
+
+        
     });
 }
 

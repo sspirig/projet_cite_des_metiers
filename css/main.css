@@ -105,8 +105,8 @@ body {
     position: absolute !important;
     top: 20px;
     left: 20px;
-    width: 36px;
-    height: 36px;
+    width: 48px;
+    height: 48px;
     background: rgba(255, 255, 255, 0.9);
     cursor: pointer;
     border-radius: 8px;
@@ -118,6 +118,7 @@ body {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     color: #007bff;
     font-weight: bold;
+    font-size: 1.5rem;
 }
 
 .menu-trigger:before {
@@ -144,10 +145,19 @@ nav#sidebar {
     bottom: 0;
     width: 284px;
     height: 100%;
-    background: linear-gradient(180deg, #052f41, #395961);
+    background: linear-gradient(180deg, #0fa0df, #157aa5, #166694, #285472);
     z-index: 999;
     transition: all 300ms ease;
     box-shadow: 3px 0 15px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    
+}
+
+#sidebar img {
+    align-self: center;
+    margin: 20px 10%;
+    border-radius: 8px;
 }
 
 nav#sidebar > ul {
@@ -172,8 +182,8 @@ nav#sidebar > ul li {
 
 nav#sidebar > ul li:hover {
     color: #c5edff;
-    border-left-color: #0777d3;
-    background: rgba(89, 187, 233, 0.1);
+    border-left-color: #00b7ff;
+    background: rgba(43, 115, 163, 0.514);
     transform: translateX(5px);
 }
 
