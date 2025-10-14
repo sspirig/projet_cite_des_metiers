@@ -1,4 +1,6 @@
 <?php
+require_once 'config.php';
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $question = trim($_POST['question'] ?? '');
     $reponse = trim($_POST['reponse'] ?? '');
@@ -18,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     file_put_contents($file, json_encode($pending, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 
-    header("Location: http://localhost/2025-2026/projet_cite_des_metiers/view/chatbot.html");
+    header("Location: " . BASE_URL . "/view/chatbot.html");
     exit;
 }
 ?>

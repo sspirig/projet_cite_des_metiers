@@ -6,6 +6,8 @@
  */
 
 require_once 'db.php';
+require_once 'config.php';
+
 
 // --- Configuration de sortie propre ---
 header('Content-Type: application/json; charset=UTF-8');
@@ -61,7 +63,7 @@ if (empty($matchedKeywordIds)) {
     echo json_encode([
         "response" => "Je n'ai malheureusement pas encore la réponse à cette question",
         "suggestion" => "Vous pouvez nous aider à améliorer l'assistant en soumettant votre question ici :",
-        "form_link" => "http://localhost/2025-2026/projet_cite_des_metiers/php/formUnanswered.php?question=" . urlencode($userInput)
+        "form_link" => BASE_URL . "/php/formUnanswered.php?question=" . urlencode($userInput)
     ]);
     exit;
 }
@@ -83,7 +85,7 @@ if (count($questions) === 0) {
     echo json_encode([
         "response" => "Je n'ai pas trouvé de réponse correspondante",
         "suggestion" => "Vous pouvez soumettre votre question ici :",
-        "form_link" => "http://localhost/2025-2026/projet_cite_des_metiers/php/formUnanswered.php?question=" . urlencode($userInput)
+        "form_link" => BASE_URL . "/php/formUnanswered.php?question=" . urlencode($userInput)
     ]);
     exit;
 }
@@ -105,7 +107,7 @@ if (count($questions) === 1) {
         saveUnansweredQuestion($userInput);
         echo json_encode([
             "response" => "Je n'ai pas trouvé de réponse à cette question.",
-            "form_link" => "form_soumission_question.php?question=" . urlencode($userInput)
+            "form_link" => BASE_URL . "/php/formUnanswered.php?question=" . urlencode($userInput)
         ]);
     }
     exit;
