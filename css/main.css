@@ -47,13 +47,16 @@ body {
     font-size: 1.3rem;
     color: #2c474b;
     margin: 0;
+    margin-left: 2rem;
+    margin-right: 2rem;
 }
 
 .button-container {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 5px;
     align-items: center;
+    
 }
 
 .button {
@@ -154,9 +157,13 @@ nav#sidebar {
     
 }
 
-#sidebar img {
+#sidebar a.logo {
     align-self: center;
     margin: 20px 10%;
+    border-radius: 8px;
+}
+.logo img {
+    scale: 100%;
     border-radius: 8px;
 }
 

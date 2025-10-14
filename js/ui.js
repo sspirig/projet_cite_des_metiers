@@ -111,12 +111,12 @@ function initializeChatUI() {
     const welcomeMessage = document.getElementById("welcome-message");
     setTimeout(() => {
         welcomeMessage.style.opacity = "0";
-    }, 3000);
+    }, 2000);
 
     setTimeout(() => {
         document.getElementById("chat-container").classList.add("active");
         document.getElementById("input-container").classList.add("active");
-    }, 3500);
+    }, 2500);
 }
 
 

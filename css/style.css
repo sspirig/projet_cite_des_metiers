@@ -25,7 +25,7 @@ body {
     font-size: 48px;
     font-weight: bold;
     text-align: center;
-    color: #007bff;
+    color: #059adf;
     position: absolute;
     top: 40%;
     left: 50%;
@@ -74,6 +74,7 @@ body {
     align-items: center;
     border-radius: 10px;
     padding: 20px;
+    filter: drop-shadow(0 4px 8px rgba(0, 174, 255, 0.5));
 }
 
 .chat-box {
@@ -119,14 +120,19 @@ body {
     font-size: 18px;
     width: 100%;
     max-width: 500px;
-    border: 2px solid #007bff;
-    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+    border: 2px solid #0b90e9;
+    box-shadow: 0 4px 8px rgba(0, 174, 255, 0.2);
     transition: box-shadow 0.3s ease;
+    
+}
+
+#user-input {
+    backdrop-filter: blur(10px);
 }
 
 .form-control:focus {
-    box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
-    border-color: #0056b3;
+    box-shadow: 0 0 20px rgba(0, 174, 255, 0.5);
+    border-color: #00a2ff;
 }
 
 .btn-primary {
@@ -134,13 +140,17 @@ body {
     padding: 15px 25px;
     font-size: 16px;
     border-radius: 50px;
-    background-color: #007bff;
+    background-color: #00a2ff;
     border: none;
     transition: background-color 0.3s ease;
+    transition: 0.3s;
+    font-weight: bold;
 }
 
 .btn-primary:hover {
-    background-color: #0056b3;
+    background-color: #16c9ff;
+    box-shadow: 0 0 20px rgba(0, 174, 255, 0.5);
+    transition: 0.3s;
 }
 
 .chat-container.active, .input-container.active {
@@ -226,19 +236,19 @@ body {
     align-items: center;
     justify-content: center;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    color: #007bff;
+    color: #00aeff;
     font-weight: bold;
     font-size: 1.5rem;
 }
 
 .menu-trigger:before {
     font-size: 1.2em;
-    color: #007bff;
+    color: #18beff;
     font-weight: bold;
 }
 
 .menu-trigger:hover {
-    background: #007bff;
+    background-color: #18beff;
     color: white;
     transform: scale(1.1);
 }
@@ -283,9 +293,13 @@ nav#sidebar {
     flex-direction: column;
 }
 
-#sidebar img {
+#sidebar a.logo {
     align-self: center;
     margin: 20px 10%;
+    border-radius: 8px;
+}
+.logo img {
+    scale: 100%;
     border-radius: 8px;
 }
 
