@@ -7,7 +7,6 @@ $question = isset($_GET['question']) ? htmlspecialchars($_GET['question']) : '';
     <meta charset="UTF-8">
     <title>Soumettre une nouvelle question</title>
     <style>
-        /* === FOND ET ANIMATION === */
         body {
             background: linear-gradient(45deg, #33b0ea, #e6f5ff, #a3fffa);
             background-size: 400% 400%;
@@ -41,7 +40,7 @@ $question = isset($_GET['question']) ? htmlspecialchars($_GET['question']) : '';
             z-index: -1;
         }
 
-        /* === FORMULAIRE === */
+
         .form-container {
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(10px);
@@ -96,7 +95,7 @@ $question = isset($_GET['question']) ? htmlspecialchars($_GET['question']) : '';
             background: rgba(255, 255, 255, 0.9);
         }
 
-        /* === BOUTON === */
+
         button {
             width: 100%;
             padding: 15px;
@@ -134,7 +133,7 @@ $question = isset($_GET['question']) ? htmlspecialchars($_GET['question']) : '';
             }
         }
 
-        /* === LIEN RETOUR === */
+
         .back-link {
             display: inline-block;
             margin-top: 20px;
@@ -150,7 +149,7 @@ $question = isset($_GET['question']) ? htmlspecialchars($_GET['question']) : '';
             text-shadow: 0 0 10px rgba(0, 123, 255, 0.4);
         }
 
-        /* === RESPONSIVE === */
+
         @media (max-width: 500px) {
             .form-container {
                 width: 90%;
