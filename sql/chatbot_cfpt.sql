@@ -21,6 +21,10 @@ SET time_zone = "+00:00";
 -- Base de données : `chatbot_cfpt`
 --
 
+CREATE DATABASE IF NOT EXISTS chatbot_cfpt
+CHARACTER SET utf8mb4
+COLLATE utf8mb4_general_ci;
+
 -- --------------------------------------------------------
 
 CREATE USER 'chatbot_admin'@'%' IDENTIFIED BY 'Super';
