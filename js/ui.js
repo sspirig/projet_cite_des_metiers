@@ -17,7 +17,7 @@ function typeResponse(text, callback) {
             setTimeout(typeCharacter, 40);
         } else {
             chatBox.scrollTop = chatBox.scrollHeight;
-            setTimeout(callback, 500);
+            setTimeout(callback, 800);
         }
     }
 
@@ -69,41 +69,38 @@ function handleSuggestionClick(questionText) {
 
 
 
-
 function displaySuggestions(suggestions) {
-    try {
-        const chatBox = document.getElementById("chat-box");
+    if (!suggestions || suggestions.length === 0) return;
 
-        const suggestionDiv = document.createElement("div");
-        suggestionDiv.className = "message response";
-        suggestionDiv.id = "suggestionDiv";
-        suggestionDiv.innerHTML = `
-        <div class="suggestion-buttons d-flex flex-wrap gap-2"></div>
-        `;
+    const chatBox = document.getElementById("chat-box");
 
-        const buttonContainer = suggestionDiv.querySelector(".suggestion-buttons");
+    const suggestionDiv = document.createElement("div");
+    suggestionDiv.className = "message response";
+    suggestionDiv.id = "suggestionDiv";
+    suggestionDiv.innerHTML = `<div class="suggestion-buttons d-flex flex-wrap gap-2"></div>`;
 
-        console.log("Suggestions reçues :", suggestions);
+    const buttonContainer = suggestionDiv.querySelector(".suggestion-buttons");
 
-        suggestions.forEach(item => {
-            const btn = document.createElement("button");
-            btn.innerHTML = item.title;
-            btn.classList.add("btn", "btn-outline-primary");
-            btn.addEventListener("click", () => {
-                handleSuggestionClick(item.title);
-                addClickEventSuggestions();
-            });
+    suggestions.forEach(item => {
+        const btn = document.createElement("button");
+        btn.innerHTML = item.title || "Suggestion";
+        btn.classList.add("btn", "btn-outline-primary");
 
-            buttonContainer.appendChild(btn);
-        });
+        // Stocke directement le lien dans un data attribute
+        if (item.link || item.form_link) {
+            btn.dataset.link = item.link || item.form_link;
+        }
 
-        chatBox.appendChild(suggestionDiv);
-        chatBox.scrollTop = chatBox.scrollHeight;
-    } catch (error) {
-        console.error(error);
-    }
+        buttonContainer.appendChild(btn);
+    });
 
+    chatBox.appendChild(suggestionDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    // Attacher les événements
+    addClickEventSuggestions();
 }
+
 
 
 

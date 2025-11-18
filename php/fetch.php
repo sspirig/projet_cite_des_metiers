@@ -61,10 +61,15 @@ $matchedKeywordIds = extractKeywords($normalizedInput, $motsCles);
 if (empty($matchedKeywordIds)) {
     saveUnansweredQuestion($userInput);
     echo json_encode([
-        "response" => "Je n'ai malheureusement pas encore la réponse à cette question",
-        "suggestion" => "Vous pouvez nous aider à améliorer l'assistant en soumettant votre question ici :",
-        "form_link" => BASE_URL . "/php/formUnanswered.php?question=" . urlencode($userInput)
-    ]);
+    "response" => "Je n'ai malheureusement pas encore la réponse à cette question.",
+    "suggestions" => [
+        [
+            "title" => "Soumettre la question",
+            "link" => BASE_URL . "/php/formUnanswered.php?question=" . urlencode($userInput)
+        ]
+    ]
+]);
+
     exit;
 }
 
@@ -83,10 +88,15 @@ $questions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 if (count($questions) === 0) {
     saveUnansweredQuestion($userInput);
     echo json_encode([
-        "response" => "Je n'ai pas trouvé de réponse correspondante",
-        "suggestion" => "Vous pouvez soumettre votre question ici :",
-        "form_link" => BASE_URL . "/php/formUnanswered.php?question=" . urlencode($userInput)
-    ]);
+    "response" => "Je n'ai malheureusement pas encore la réponse à cette question.",
+    "suggestions" => [
+        [
+            "title" => "Soumettre la question",
+            "link" => BASE_URL . "/php/formUnanswered.php?question=" . urlencode($userInput)
+        ]
+    ]
+]);
+
     exit;
 }
 
@@ -106,9 +116,15 @@ if (count($questions) === 1) {
     } else {
         saveUnansweredQuestion($userInput);
         echo json_encode([
-            "response" => "Je n'ai pas trouvé de réponse à cette question.",
-            "form_link" => BASE_URL . "/php/formUnanswered.php?question=" . urlencode($userInput)
+            "response" => "Je n'ai malheureusement pas encore la réponse à cette question.",
+            "suggestions" => [
+                [
+                    "title" => "Soumettre la question",
+                    "link" => BASE_URL . "/php/formUnanswered.php?question=" . urlencode($userInput)
+                ]
+            ]
         ]);
+
     }
     exit;
 }
@@ -141,13 +157,15 @@ exit;
 
 
 // --- Fonctions utilitaires ---
-function normalizeText($text) {
+function normalizeText($text)
+{
     $text = preg_replace('/[^\w\s]/u', ' ', $text);
     $text = preg_replace('/\s+/', ' ', $text);
     return strtolower(trim($text));
 }
 
-function extractKeywords($text, $motsCles) {
+function extractKeywords($text, $motsCles)
+{
     $matchedIds = [];
     $remainingText = $text;
     foreach ($motsCles as $motCle) {
@@ -160,7 +178,8 @@ function extractKeywords($text, $motsCles) {
     return array_unique($matchedIds);
 }
 
-function saveUnansweredQuestion($question) {
+function saveUnansweredQuestion($question)
+{
     $file = __DIR__ . '/unanswered_questions.json';
     $questions = file_exists($file) ? json_decode(file_get_contents($file), true) : [];
 

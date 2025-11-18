@@ -23,7 +23,7 @@ SET time_zone = "+00:00";
 
 -- --------------------------------------------------------
 
-CREATE USER 'chatbot_admin'@'%' IDENTIFIED BY 'MotDePasseSuperSecurise!';
+CREATE USER 'chatbot_admin'@'%' IDENTIFIED BY 'Super';
 GRANT ALL PRIVILEGES ON chatbot_cfpt.* TO 'chatbot_admin'@'%';
 FLUSH PRIVILEGES;
 
